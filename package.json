@@ -1,0 +1,24 @@
+{
+  "name": "node-docker-stresstest",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Base application to show docker compose - swarm capabilities with Node and mongoDB",
+  "author": "Marco Bongiovanni <marco.bongiovanni94@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev-docker": "../node_modules/nodemon/bin/nodemon.js --debug=5858",
+    "dev-host": "nodemon --debug=5858",
+    "start-watch": "nodemon index.js --inspect=0.0.0.0:9229",
+    "start-wait-debuger": "nodemon index.js --inspect-brk=0.0.0.0:9229"
+  },
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongodb": "^4.3.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.15"
+  }
+}

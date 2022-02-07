@@ -1,0 +1,19 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        // Execute command in docker
+        "label": "Docker terminal in container (bash)",
+        "type": "shell",
+        "command": "docker compose exec express-server bash",
+        "group": "test",
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": true
+        }
+      },
+    ]
+  }

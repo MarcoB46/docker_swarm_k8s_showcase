@@ -1,0 +1,27 @@
+version: '2.4'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+      args:
+        - NODE_ENV=development
+    # questo comando in windows non è sempre funzionante al 100% (nel mio caso non funziona).
+    # Si può forzare il meccanismo legacy per rilevare cambiamenti ai files con il flag -L 
+    # che sfrutta un semplice meccanismo di polling
+    command: ../node_modules/.bin/nodemon -L --inspect=0.0.0.0:9229 ./bin/www
+    ports:
+      - "80:3000"
+      - "9229:9229" # questa porta serve per nodemon
+    volumes:
+      - .:/opt/node_app/app 
+      - ./package.json:/opt/node_app/package.json
+      - ./package-lock.json:/opt/node_app/package-lock.json 
+      # in questo modo i node_modules non verranno salvati nell'host 
+      # nel caso in cui sia necessario averli entrambi (!RICORDARE DI ELIMINARE QUESTO VOLUME QUANDO FINITO)
+      - notused:/opt/node_app/app/node_modules
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  notused:
