@@ -2,7 +2,7 @@ version: '2.4'
 services:
   server:
     build:
-      context: .
+      context: ./server
       dockerfile: Dockerfile-server
       args:
         - NODE_ENV=development
@@ -14,14 +14,40 @@ services:
       - "80:3000"
       - "9229:9229" # questa porta serve per nodemon
     volumes:
-      - .:/opt/node_app/app 
-      - ./package.json:/opt/node_app/package.json
-      - ./package-lock.json:/opt/node_app/package-lock.json 
+      - ./server:/opt/node_app/app 
+      - ./server/package.json:/opt/node_app/package.json
+      - ./server/package-lock.json:/opt/node_app/package-lock.json 
       # in questo modo i node_modules non verranno salvati nell'host 
       # nel caso in cui sia necessario averli entrambi (!RICORDARE DI ELIMINARE QUESTO VOLUME QUANDO FINITO)
       - notused:/opt/node_app/app/node_modules
     environment:
       - NODE_ENV=development
+      - MONGO_USERNAME=root
+      - MONGO_PASSWORD=example
+      - MONGO_HOSTNAME=database
+      - MONGO_PORT=27017
+      - MONGO_DATABASE_NAME=example-database
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      disable: true
 
+  database:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_DATABASE=example-database
+    volumes:
+      - ./mongodb/seed.js:/docker-entrypoint-initdb.d/seed.js
+    healthcheck:
+      test: "[ `echo 'db.runCommand(\"ping\").ok' | mongo localhost/example-database --quiet` ] && echo 0 || echo 1"
+      interval: 5s
+      start_period: 10s
+      timeout: 4s
+      retries: 3
 volumes:
   notused:
