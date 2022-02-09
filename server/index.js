@@ -38,8 +38,21 @@ const app = express();
 
 app.use(morgan('common'));
 
-app.get('/', function (req, res) {
-  res.send('hello from host: \n'+ os.hostname()+"\t"+new Date(Date.now()));
+app.get('/', async function (req, res) {
+  const options = { // upsert è usato per creare l'oggetto nel db se non esiste ancora
+    upsert: true
+  };
+
+  const query = { hostname: os.hostname() };
+  const update = { $inc: { counter: 1 }};
+  let document = db.collection('connections').updateOne(query, update, options);
+  let updated = await new Promise((resolve) => {
+      document.then((data) => {
+        resolve(data.modifiedCount > 0);
+      });
+    });
+  
+  res.send('hello from host: <br>'+ os.hostname() +( updated ? "<br> performed update!" : "<br> new record created!"));
 });
 
 app.get('/hc', function (req, res) {
@@ -49,12 +62,12 @@ app.get('/hc', function (req, res) {
 app.get('/connections', function (req, res, next) {
   // might have not been connected just yet
   if (db) {
-    db.collection('connections').find({}).toArray(function(err, docs) {
+    db.collection('connections').find({}).toArray(function(err, conn) {
       if (err) {
         console.error(err);
         next(new Error('Error while talking to database'));
       } else {
-        res.json(docs);
+        res.json(conn);
       }
     });
   } else {
