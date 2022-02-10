@@ -1,0 +1,41 @@
+version: '3.1'
+services:
+  node:
+    image: mbongiovanni94/stresstestexample:0.004
+    ports:
+      - "80:3000"
+    environment:
+        - NODE_ENV=production
+        - MONGO_USERNAME_FILE=/run/secrets/mongo_root
+        - MONGO_PASSWORD_FILE=/run/secrets/mongo_root_password
+        - MONGO_HOSTNAME=database
+        - MONGO_PORT=27017
+        - MONGO_DATABASE_NAME=example-database
+    secrets:
+      - mongo_root
+      - mongo_root_password
+    deploy:
+      replicas: 5
+
+  database:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/mongo_root
+      - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_root_password
+      - MONGO_INITDB_DATABASE=example-database
+    secrets:
+      - mongo_root
+      - mongo_root_password
+    healthcheck:
+      test: "[ `echo 'db.runCommand(\"ping\").ok' | mongo localhost/example-database --quiet` ] && echo 0 || echo 1"
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+secrets:
+  mongo_root:
+    external: true
+  mongo_root_password:
+    external: true

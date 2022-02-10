@@ -26,4 +26,9 @@ ENV PATH /opt/node_app/node_modules/.bin:$PATH
 WORKDIR /opt/node_app/app
 COPY --chown=node:node . .
 
+# this script is used in order to make use of the secret capability of docker
+# by injecting the secrets inside the env. of the container, if a secret is present.
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 CMD [ "node", "./bin/www" ]

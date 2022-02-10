@@ -18,7 +18,7 @@ const {
 // Connection URL
 const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}`;
 
-// // Create a new MongoClient
+// Create a new MongoClient
 const client = new MongoClient(url);
 
 let db;
@@ -38,21 +38,30 @@ const app = express();
 
 app.use(morgan('common'));
 
-app.get('/', async function (req, res) {
+app.get('/', async function (req, res, next) {
+  const options = { // upsert è usato per creare l'oggetto nel db se non esiste ancora
+    upsert: true
+  };
+  
+  res.send('hello from host: <br>'+ os.hostname() + "  " + MONGO_USERNAME + "  " + MONGO_PASSWORD);
+});
+
+app.get('/ping', async function (req, res, next) {
   const options = { // upsert è usato per creare l'oggetto nel db se non esiste ancora
     upsert: true
   };
 
   const query = { hostname: os.hostname() };
   const update = { $inc: { counter: 1 }};
-  let document = db.collection('connections').updateOne(query, update, options);
-  let updated = await new Promise((resolve) => {
-      document.then((data) => {
-        resolve(data.modifiedCount > 0);
-      });
-    });
-  
-  res.send('hello from host: <br>'+ os.hostname() +( updated ? "<br> performed update!" : "<br> new record created!"));
+  await db.collection('connections').updateOne(query, update, options);
+  db.collection("connections").find({hostname: os.hostname()}).toArray(function(err, data) {
+    if (err) {
+      console.error(err);
+      next(new Error('Error while talking to database')); // utile per loggare l'errore
+    } else {
+      res.json(data);
+    }
+  });
 });
 
 app.get('/hc', function (req, res) {
@@ -65,7 +74,7 @@ app.get('/connections', function (req, res, next) {
     db.collection('connections').find({}).toArray(function(err, conn) {
       if (err) {
         console.error(err);
-        next(new Error('Error while talking to database'));
+        next(new Error('Error while talking to database')); // utile per loggare l'errore
       } else {
         res.json(conn);
       }
