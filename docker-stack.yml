@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   node:
-    image: mbongiovanni94/stresstestexample:0.004
+    image: mbongiovanni94/stresstestexample:0.006
     ports:
       - "80:3000"
     environment:

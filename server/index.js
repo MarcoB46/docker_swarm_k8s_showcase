@@ -78,7 +78,9 @@ app.get('/ping', async function (req, res, next) {
       console.error(err);
       next(new Error('Error while talking to database')); // utile per loggare l'errore
     } else {
-      res.json(data);
+      setTimeout(() => { // utile per simulare del "carico"
+        res.json(data);
+      }, 500);
     }
   });
 });
