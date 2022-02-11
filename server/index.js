@@ -78,15 +78,17 @@ app.get('/ping', async function (req, res, next) {
       console.error(err);
       next(new Error('Error while talking to database')); // utile per loggare l'errore
     } else {
+      res.json(data);
       setTimeout(() => { // utile per simulare del "carico"
-        res.json(data);
+        return
       }, 500);
     }
   });
 });
 
-app.get('/hc', function (req, res) {
-  res.send('healthcheck\n');
+
+app.get('/kill', function (req, res) {
+  process.kill(process.pid, 'SIGTERM'); //! testare
 });
 
 app.get('/connections', function (req, res, next) {
