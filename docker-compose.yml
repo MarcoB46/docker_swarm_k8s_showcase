@@ -32,6 +32,8 @@ services:
         condition: service_healthy
     healthcheck:
       disable: true
+    networks:
+      - backend
 
   database:
     image: mongo:5
@@ -49,5 +51,11 @@ services:
       start_period: 10s
       timeout: 4s
       retries: 3
+    networks:
+      - backend
 volumes:
   notused:
+
+networks:
+  backend:
+    driver: bridge

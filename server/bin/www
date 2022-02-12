@@ -47,7 +47,10 @@ server.on('connection', function (socket) {
 
 // shut down server
 function shutdown() {
-  waitForSocketsToClose(10);
+  console.log("Forcing all connections to close");
+  for (var socketId in sockets) {
+    sockets[socketId].destroy();
+  }
 
   server.close(function onServerClosed (err) {
     if (err) {
@@ -56,16 +59,4 @@ function shutdown() {
     }
     process.exit();
   });
-}
-
-function waitForSocketsToClose(counter) {
-  if (counter > 0) {
-    console.log(`Waiting ${counter} more ${counter !== 1 ? 'seconds' : 'second'} for all connections to close...`);
-    return setTimeout(waitForSocketsToClose, 1000, counter - 1);
-  }
-  
-  console.log("Forcing all connections to close now");
-  for (var socketId in sockets) {
-    sockets[socketId].destroy();
-  }
 }

@@ -72,23 +72,27 @@ app.get('/ping', async function (req, res, next) {
 
   const query = { hostname: os.hostname() };
   const update = { $inc: { counter: 1 }};
-  await db.collection('connections').updateOne(query, update, options);
-  db.collection("connections").find({hostname: os.hostname()}).toArray(function(err, data) {
-    if (err) {
-      console.error(err);
-      next(new Error('Error while talking to database')); // utile per loggare l'errore
-    } else {
-      res.json(data);
-      setTimeout(() => { // utile per simulare del "carico"
-        return
-      }, 500);
-    }
-  });
+ if (db) {
+    await db.collection('connections').updateOne(query, update, options);
+    db.collection("connections").find({hostname: os.hostname()}).toArray(function(err, data) {
+      if (err) {
+        console.error(err);
+        next(new Error('Error while talking to database')); // utile per loggare l'errore
+      } else {
+        setTimeout(() => { // utile per simulare del "carico"
+          res.json(data);
+        }, 500);
+      }
+    });
+ } else {
+  res.json({hostname: os.hostname(), status: "pending"});
+ }
 });
 
 
 app.get('/kill', function (req, res) {
-  process.kill(process.pid, 'SIGTERM'); //! testare
+  res.json({hostname: os.hostname(), status: "killed"});
+  process.kill(process.pid, 'SIGTERM');
 });
 
 app.get('/connections', function (req, res, next) {

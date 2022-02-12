@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   node:
-    image: mbongiovanni94/stresstestexample:0.007
+    image: mbongiovanni94/stresstestexample:0.013
     ports:
       - "80:3000"
     environment:
@@ -16,6 +16,8 @@ services:
       - mongo_root_password
     deploy:
       replicas: 5
+    networks:
+      - backend
 
   database:
     image: mongo:5
@@ -33,9 +35,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+    networks:
+      - backend
 
 secrets:
   mongo_root:
     external: true
   mongo_root_password:
     external: true
+
+networks:
+  backend:
+    external:
+      name: backend
