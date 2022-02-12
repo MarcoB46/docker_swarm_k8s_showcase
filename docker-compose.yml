@@ -3,7 +3,7 @@ services:
   server:
     build:
       context: ./server
-      dockerfile: Dockerfile-server
+      dockerfile: Dockerfile
       args:
         - NODE_ENV=development
     # questo comando in windows non è sempre funzionante al 100% (nel mio caso non funziona).
@@ -11,7 +11,7 @@ services:
     # che sfrutta un semplice meccanismo di polling
     command: ../node_modules/.bin/nodemon -L --inspect=0.0.0.0:9229 ./bin/www
     ports:
-      - "80:3000"
+      - "8080:3000"
       - "9229:9229" # questa porta serve per nodemon
     volumes:
       - ./server:/opt/node_app/app 
@@ -34,6 +34,7 @@ services:
       disable: true
     networks:
       - backend
+      - frontend_net
 
   database:
     image: mongo:5
@@ -53,9 +54,33 @@ services:
       retries: 3
     networks:
       - backend
+
+  frontend:
+    build:
+      context: ./frontend/interrogator
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    ports:
+      - "80:4000"
+    volumes:
+      - ./frontend/interrogator:/opt/node_app/app 
+      - ./frontend/interrogator/package.json:/opt/node_app/package.json
+      - ./frontend/interrogator/package-lock.json:/opt/node_app/package-lock.json 
+      # in questo modo i node_modules non verranno salvati nell'host 
+      # nel caso in cui sia necessario averli entrambi (!RICORDARE DI ELIMINARE QUESTO VOLUME QUANDO FINITO)
+      - notused_interrogator:/opt/node_app/app/node_modules
+    healthcheck:
+      disable: true
+    networks:
+      - frontend_net
+
 volumes:
   notused:
+  notused_interrogator:
 
 networks:
   backend:
+    driver: bridge
+  frontend_net:
     driver: bridge

@@ -118,7 +118,7 @@ export default {
       }
       this.pingStopEnabled = true;
       this.pingFloodInterval = setInterval(() => {
-        axios.get("http://172.29.100.34:80/ping").then((response) => {
+        axios.get("http://server:8080/ping").then((response) => {
           if (response.data?.status) {
             this.addContainer({hostname: response.data.hostname, status: response.data.status})
           } else {
@@ -162,7 +162,7 @@ export default {
       );
     },
     killRandomContainer: function () {
-      axios.get("http://172.29.100.34:80/kill").then((res) => {
+      axios.get("http://server:8080/kill").then((res) => {
         let containerInArray = function (container) {
           return container.hostname == res.data.hostname;
         }.bind(this);
