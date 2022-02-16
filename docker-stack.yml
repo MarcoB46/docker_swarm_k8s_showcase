@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   server:
-    image: mbongiovanni94/stresstestexample:0.019
+    image: mbongiovanni94/stresstestexample:1.00.000
     ports:
       - "8080:3000"
     environment:
@@ -40,11 +40,11 @@ services:
       - backend
 
   frontend:
-    image: mbongiovanni94/stresstestfrontend:0.013
+    image: mbongiovanni94/stresstestfrontend:1.00.000
     ports:
       - "80:80"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
     deploy:
       replicas: 1
     networks:

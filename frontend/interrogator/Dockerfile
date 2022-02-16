@@ -1,7 +1,6 @@
 # here version 16 of node is used insted of 17 because of problems of compatibility with vue-cli
 FROM node:16-slim 
 
-#! this line needs to be changed in production once the build command is supported
 ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
 
