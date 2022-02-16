@@ -1,9 +1,9 @@
 version: '3.1'
 services:
-  node:
-    image: mbongiovanni94/stresstestexample:0.013
+  server:
+    image: mbongiovanni94/stresstestexample:0.019
     ports:
-      - "80:3000"
+      - "8080:3000"
     environment:
         - NODE_ENV=production
         - MONGO_USERNAME_FILE=/run/secrets/mongo_root
@@ -18,6 +18,7 @@ services:
       replicas: 5
     networks:
       - backend
+      - frontend_net
 
   database:
     image: mongo:5
@@ -38,6 +39,17 @@ services:
     networks:
       - backend
 
+  frontend:
+    image: mbongiovanni94/stresstestfrontend:0.013
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=development
+    deploy:
+      replicas: 1
+    networks:
+      - frontend_net
+
 secrets:
   mongo_root:
     external: true
@@ -48,3 +60,6 @@ networks:
   backend:
     external:
       name: backend
+  frontend_net:
+    external:
+      name: frontend_net

@@ -1,12 +1,13 @@
 # here version 16 of node is used insted of 17 because of problems of compatibility with vue-cli
 FROM node:16-slim 
 
-ARG NODE_ENV=production
+#! this line needs to be changed in production once the build command is supported
+ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
 
 ARG PORT=4000
 ENV PORT $PORT
-EXPOSE $PORT
+# EXPOSE $PORT
 
 ## IMPOSTAZIONI DI DEFAULT DI NODE:
 # install dependencies first, in a different location for easier app bind mounting for local development
@@ -27,5 +28,14 @@ ENV PATH /opt/node_app/node_modules/.bin:$PATH
 WORKDIR /opt/node_app/app
 COPY --chown=node:node . .
 
-#! this command should be changed for performance reason, should be the build instead of the dev env
-CMD [ "npm", "run", "serve" ] 
+RUN npm run build
+# CMD [ "npm", "run", "build" ] 
+# the build comand create a /dist folder containing the website builded and ready for prod.
+
+FROM httpd:2
+# the --from=0 copy just builder source into the apache webroot 
+# (instead of using webpack as for the default development env)
+COPY --from=0 /opt/node_app/app/dist/ /usr/local/apache2/htdocs/
+COPY --from=0 --chown=root:root /opt/node_app/app/apache_settings/.htaccess /usr/local/apache2/conf/.htaccess
+COPY --from=0 --chown=root:root /opt/node_app/app/apache_settings/httpd.conf /usr/local/apache2/conf/httpd.conf
+EXPOSE $PORT

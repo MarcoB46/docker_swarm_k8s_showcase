@@ -15,7 +15,8 @@
   "dependencies": {
     "express": "^4.17.2",
     "mongodb": "^4.3.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "cors": "2.8.5"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

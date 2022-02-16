@@ -62,7 +62,7 @@ services:
       args:
         - NODE_ENV=development
     ports:
-      - "80:4000"
+      - "80:80"
     volumes:
       - ./frontend/interrogator:/opt/node_app/app 
       - ./frontend/interrogator/package.json:/opt/node_app/package.json
