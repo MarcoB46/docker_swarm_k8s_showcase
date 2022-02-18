@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-stack.yml -o kompose
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      io.kompose.service: server
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-stack.yml -o kompose
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.network/frontend: "true"
+        io.kompose.service: server
+    spec:
+      containers:
+        - env:
+            - name: MONGO_DATABASE_NAME
+              value: example-database
+            - name: MONGO_HOSTNAME
+              value: database
+            - name: MONGO_PASSWORD
+              value: example
+            - name: MONGO_PORT
+              value: "27017"
+            - name: MONGO_USERNAME
+              value: root
+            - name: NODE_ENV
+              value: production
+          image: mbongiovanni94/stresstestexample:1.00.000
+          name: server
+          ports:
+            - containerPort: 3000
+          resources: {}
+          # volumeMounts:
+          #   - mountPath: /run/secrets/mongo_root
+          #     name: mongo_root
+          #   - mountPath: /run/secrets/mongo_root_password
+          #     name: mongo_root_password
+      restartPolicy: Always
+      # volumes:
+      #   - name: mongo_root
+      #     secret:
+      #       items:
+      #         - key: mongo_root
+      #           path: mongo_root
+      #       secretName: mongo_root
+      #   - name: mongo_root_password
+      #     secret:
+      #       items:
+      #         - key: mongo_root_password
+      #           path: mongo_root_password
+      #       secretName: mongo_root_password
+status: {}
