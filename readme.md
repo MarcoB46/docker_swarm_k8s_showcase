@@ -1,4 +1,4 @@
-# Docker Compose and Docker Swarm showcase example
+# Docker Compose, Docker Swarm and k8s showcase example
 This project is a showcase for **Docker**, the utility **Docker Compose** and the native Orchestration Tool **Swarm**. <br>Some of the tecknologies used in this project are:
 - NodeJS Express WebServer;
 - mongoDB;
@@ -59,3 +59,28 @@ The docker-stack.yml manages all the properties to run all the services in Swarm
 
 In order to facilitate the creation of the Swarm and the needed resources a **startup_stack.sh** file is also present. It will initiate the Swarm, create the secrets for the DB user and passwords and create the two networks needed, one used by server and backend and the other used by the frontend and the server.
 
+## k8s
+The files located inside the **/kompose** folder manages all the properties to deploy the application to a k8s cluster.<br>Those files are generated from the docker-stack.yml file using the [Kompose](https://kompose.io/) utility using the following command:<br>
+```console
+kompose convert -f docker-stack.yml -o kompose
+```
+The output is the followind list of files:
+- backend-networkpolicy.yaml
+- database-deployment.yaml
+- database-service.yaml
+- frontend-deployment.yaml
+- frontend-networkpolicy.yaml
+- frontend-service.yaml
+- server-deployment.yaml
+- server-service.yaml
+
+in order to apply those configuration to a k8s cluster it's possible to use the following command:
+```console
+ k apply -f backend-networkpolicy.yaml,frontend-networkpolicy.yaml,database-service.yaml,server-service.yaml,frontend-service.yaml,database-deployment.yaml,server-deployment.yaml,frontend-deployment.yaml
+```
+
+in order to obtain the port assigned to the host it is possibile to use 
+```console
+k get service frontend --watch
+```
+waiting for the external IP to be assigned.
