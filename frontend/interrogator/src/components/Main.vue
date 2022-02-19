@@ -10,6 +10,7 @@
           <v-list-item-content>
             <v-list-item-title :class="item.textColor">{{ item.hostname }}</v-list-item-title>
             <v-spacer></v-spacer>
+            {{ item.counter }}
           </v-list-item-content>        
         </v-list-item>
         <v-progress-linear

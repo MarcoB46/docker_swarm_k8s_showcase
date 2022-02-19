@@ -28,7 +28,7 @@ spec:
         - env:
             - name: NODE_ENV
               value: production
-          image: mbongiovanni94/stresstestfrontend:1.00.000
+          image: mbongiovanni94/stresstestfrontend:1.00.001
           name: frontend
           ports:
             - containerPort: 80

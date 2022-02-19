@@ -54,7 +54,7 @@ docker compose -f .\docker-compose.yml -p nodemongo down
 ## Docker Stack 
 The docker-stack.yml manages all the properties to run all the services in Swarm mode. It uses the images hosted on Docker Hub of the Dockerfile described above:
 - mbongiovanni94/stresstestexample:1.00.000
-- mbongiovanni94/stresstestfrontend:1.00.000
+- mbongiovanni94/stresstestfrontend:1.00.001
 
 
 In order to facilitate the creation of the Swarm and the needed resources a **startup_stack.sh** file is also present. It will initiate the Swarm, create the secrets for the DB user and passwords and create the two networks needed, one used by server and backend and the other used by the frontend and the server.

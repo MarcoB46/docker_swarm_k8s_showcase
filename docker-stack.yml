@@ -40,7 +40,7 @@ services:
       - backend
 
   frontend:
-    image: mbongiovanni94/stresstestfrontend:1.00.000
+    image: mbongiovanni94/stresstestfrontend:1.00.001
     ports:
       - "80:80"
     environment:
