@@ -74,7 +74,7 @@ The output is the followind list of files:
 - server-deployment.yaml
 - server-service.yaml
 
-**NOTE:**The file database-secret.yaml instead has been created manually in order to overcome the incompatibility for Kompose to convert external secrets, used in the docker-stack.yaml configuration. 
+**NOTE:** The file database-secret.yaml instead has been created manually in order to overcome the incompatibility for Kompose to convert external secrets, used in the docker-stack.yaml configuration. 
 
 in order to apply those configuration to a k8s cluster it's possible to use the following command:
 ```console
