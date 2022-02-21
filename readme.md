@@ -78,7 +78,7 @@ The output is the followind list of files:
 
 in order to apply those configuration to a k8s cluster it's possible to use the following command:
 ```console
- k apply -f backend-networkpolicy.yaml,frontend-networkpolicy.yaml,database-service.yaml,server-service.yaml,frontend-service.yaml,database-deployment.yaml,server-deployment.yaml,frontend-deployment.yaml
+ k apply -f database-secret.yaml,backend-networkpolicy.yaml,frontend-networkpolicy.yaml,database-deployment.yaml,database-service.yaml,server-deployment.yaml,server-service.yaml,frontend-deployment.yaml,frontend-service.yaml
 ```
 
 in order to obtain the port assigned to the host it is possibile to use 
