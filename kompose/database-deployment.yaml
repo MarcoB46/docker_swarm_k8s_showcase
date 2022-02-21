@@ -27,11 +27,21 @@ spec:
       containers:
         - env:
             - name: MONGO_INITDB_DATABASE
-              value: example-database
+              valueFrom:
+                # defined inside database-secret.yaml
+                secretKeyRef:
+                  name: database-secret
+                  key: default-database
             - name: MONGO_INITDB_ROOT_PASSWORD
-              value: example
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: database-password
             - name: MONGO_INITDB_ROOT_USERNAME
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: database-user
           image: mongo:5
           livenessProbe:
             exec:
@@ -44,23 +54,5 @@ spec:
           ports:
             - containerPort: 27017
           resources: {}
-          # volumeMounts:
-          #   - mountPath: /run/secrets/mongo_root
-          #     name: mongo_root
-          #   - mountPath: /run/secrets/mongo_root_password
-          #     name: mongo_root_password
       restartPolicy: Always
-      # volumes:
-      #   - name: mongo_root
-      #     secret:
-      #       items:
-      #         - key: mongo_root
-      #           path: mongo_root
-      #       secretName: mongo_root
-      #   - name: mongo_root_password
-      #     secret:
-      #       items:
-      #         - key: mongo_root_password
-      #           path: mongo_root_password
-      #       secretName: mongo_root_password
 status: {}

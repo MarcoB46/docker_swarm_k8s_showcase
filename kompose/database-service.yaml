@@ -11,7 +11,11 @@ metadata:
 spec:
   ports:
     - name: "27017"
+      # indicates the port on which the service is accessible (using it's IP address)
+      # whithin the cluster
       port: 27017
+      # indicates on which port the service should forward the request on the pods
+      # (it's the same defined in the deployment config file)
       targetPort: 27017
   selector:
     io.kompose.service: database

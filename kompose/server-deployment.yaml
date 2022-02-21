@@ -28,15 +28,25 @@ spec:
       containers:
         - env:
             - name: MONGO_DATABASE_NAME
-              value: example-database
+              valueFrom:
+                # defined inside database-secret.yaml
+                secretKeyRef:
+                  name: database-secret
+                  key: default-database
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: database-password
+            - name: MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: database-user
             - name: MONGO_HOSTNAME
               value: database
-            - name: MONGO_PASSWORD
-              value: example
             - name: MONGO_PORT
               value: "27017"
-            - name: MONGO_USERNAME
-              value: root
             - name: NODE_ENV
               value: production
           image: mbongiovanni94/stresstestexample:1.00.000
@@ -44,23 +54,5 @@ spec:
           ports:
             - containerPort: 3000
           resources: {}
-          # volumeMounts:
-          #   - mountPath: /run/secrets/mongo_root
-          #     name: mongo_root
-          #   - mountPath: /run/secrets/mongo_root_password
-          #     name: mongo_root_password
       restartPolicy: Always
-      # volumes:
-      #   - name: mongo_root
-      #     secret:
-      #       items:
-      #         - key: mongo_root
-      #           path: mongo_root
-      #       secretName: mongo_root
-      #   - name: mongo_root_password
-      #     secret:
-      #       items:
-      #         - key: mongo_root_password
-      #           path: mongo_root_password
-      #       secretName: mongo_root_password
 status: {}
