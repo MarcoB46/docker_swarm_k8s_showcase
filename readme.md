@@ -74,6 +74,8 @@ The output is the followind list of files:
 - server-deployment.yaml
 - server-service.yaml
 
+**NOTE:**The file database-secret.yaml instead has been created manually in order to overcome the incompatibility for Kompose to convert external secrets, used in the docker-stack.yaml configuration. 
+
 in order to apply those configuration to a k8s cluster it's possible to use the following command:
 ```console
  k apply -f backend-networkpolicy.yaml,frontend-networkpolicy.yaml,database-service.yaml,server-service.yaml,frontend-service.yaml,database-deployment.yaml,server-deployment.yaml,frontend-deployment.yaml
@@ -84,3 +86,8 @@ in order to obtain the port assigned to the host it is possibile to use
 k get service frontend --watch
 ```
 waiting for the external IP to be assigned.
+
+
+----------
+
+@MarcoB46 - Marco Bongiovanni - marco.bongiovanni94@gmail.com
