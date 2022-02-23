@@ -47,9 +47,9 @@ spec:
             exec:
               command:
                 - '[ `echo ''db.runCommand("ping").ok'' | mongo localhost/example-database --quiet` ] && echo 0 || echo 1'
-            failureThreshold: 3
-            periodSeconds: 5
-            timeoutSeconds: 5
+            failureThreshold: 10
+            periodSeconds: 30
+            timeoutSeconds: 30
           name: database
           ports:
             - containerPort: 27017
