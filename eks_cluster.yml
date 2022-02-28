@@ -1,0 +1,75 @@
+apiVersion: eksctl.io/v1alpha5
+availabilityZones:
+  - us-west-2b
+  - us-west-2c
+  - us-west-2a
+cloudWatch:
+  clusterLogging: {}
+iam:
+  vpcResourceControllerPolicy: true
+  withOIDC: false
+kind: ClusterConfig
+kubernetesNetworkConfig:
+  ipFamily: IPv4
+managedNodeGroups:
+  - amiFamily: AmazonLinux2
+    desiredCapacity: 2
+    disableIMDSv1: false
+    disablePodIMDS: false
+    iam:
+      withAddonPolicies:
+        albIngress: false
+        appMesh: false
+        appMeshPreview: false
+        autoScaler: false
+        awsLoadBalancerController: false
+        certManager: false
+        cloudWatch: false
+        ebs: false
+        efs: false
+        externalDNS: false
+        fsx: false
+        imageBuilder: false
+        xRay: false
+    instanceSelector: {}
+    instanceTypes:
+      # it won't work whith t2.micro istances, don't know why
+      # - t2.micro 
+      - m5.large
+    labels:
+      alpha.eksctl.io/cluster-name: stresstest-cluster
+      alpha.eksctl.io/nodegroup-name: ng-537934c9
+    maxSize: 2
+    minSize: 2
+    name: ng-537934c9
+    privateNetworking: false
+    releaseVersion: ""
+    securityGroups:
+      withLocal: null
+      withShared: null
+    ssh:
+      allow: false
+      publicKeyPath: ""
+    tags:
+      alpha.eksctl.io/nodegroup-name: ng-537934c9
+      alpha.eksctl.io/nodegroup-type: managed
+    volumeIOPS: 3000
+    volumeSize: 80
+    volumeThroughput: 125
+    volumeType: gp3
+metadata:
+  name: stresstest-cluster
+  region: us-west-2
+  version: "1.21"
+privateCluster:
+  enabled: false
+  skipEndpointCreation: false
+vpc:
+  autoAllocateIPv6: false
+  cidr: 192.168.0.0/16
+  clusterEndpoints:
+    privateAccess: false
+    publicAccess: true
+  manageSharedNodeSecurityGroupRules: true
+  nat:
+    gateway: Single

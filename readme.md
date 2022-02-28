@@ -57,7 +57,13 @@ The docker-stack.yml manages all the properties to run all the services in Swarm
 - mbongiovanni94/stresstestfrontend:1.00.001
 
 
-In order to facilitate the creation of the Swarm and the needed resources a **startup_stack.sh** file is also present. It will initiate the Swarm, create the secrets for the DB user and passwords and create the two networks needed, one used by server and backend and the other used by the frontend and the server.
+In order to facilitate the creation of the Swarm and the needed resources a **startup_stack.sh** file is also present. It will initiate the Swarm, create the secrets for the DB user and passwords and create the two networks needed, one used by server and backend and the other used by the frontend and the server.<br>
+It's possible to launch the docker [Docker Swarm Visualizer](https://github.com/dockersamples/docker-swarm-visualizer) by launching from a swarm leader node the following command:
+```console
+docker run -it -d -p 8088:8080 -v /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer
+```
+
+
 
 ## k8s
 The files located inside the **/kompose** folder manages all the properties to deploy the application to a k8s cluster.<br>Those files are generated from the docker-stack.yml file using the [Kompose](https://kompose.io/) utility using the following command:<br>
@@ -87,7 +93,21 @@ k get service frontend --watch
 ```
 waiting for the external IP to be assigned.
 
-
+----------
+## Elastic Kubernetes Service
+It's possible to deploy a cluster on kubernetes instance given by different vendor, one example of which is Amazon's managed Kubernetes service for EC2, **EKS**. A tool named [eksctl](https://eksctl.io/) can be used to achive this goal. A configuration file, **eks_cluster.yml**, is used to obtain the information needed in order to create a cluster.<br>Is it possible to use the following command in order to do so:
+```console
+eksctl create cluster -f eks_cluster.yml
+```
+The deploy could take some minutes, once it's done it is possible to apply the k8s entities with the command present above in the relative section.<br>
+It's possible to obtain stack information using the command
+```console
+kubectl get all -o wide
+```
+It is possible to delete the stack in any moment by giving
+```console
+eksctl delete cluster -f eks_cluster.yml
+```
 ----------
 
 @MarcoB46 - Marco Bongiovanni - marco.bongiovanni94@gmail.com
