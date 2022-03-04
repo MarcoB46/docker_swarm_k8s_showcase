@@ -25,6 +25,10 @@ The project is divided into 3 services as follow:
 - a frontend page, which communicates with the Express Webserver through a dedicated subnetwork, created with **VueJs** and **Vuetify**. This page is build using the Vue-CLI `build` command and served with an **Apache** webserver to the final user. This WebApp make possible to execute the call to the endpoint descrived above.<br>
 ----------
 
+## Utils
+Some utility scripts are present inside the **utils** folder. Those scripts could be used to install Docker on an Ubuntu distribution (**docker_install_linux.sh**), Amazon EC2 Instance (**docker_install_linux_ec2_amzn.sh**), and install the docker compose utility.
+
+----------
 ## Dockerfiles
 ### Server
 Located inside the /server/ folder, this file describe the creation of the image used for the **server** container. It uses some of the best pratices indicated by the NodeJS on Docker guide like the use of the **node** user in order to run code whith an unprivileged user. The installation of the dependencies is execured by this command<br>
