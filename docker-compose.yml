@@ -58,11 +58,11 @@ services:
   frontend:
     build:
       context: ./frontend/interrogator
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_develop
       args:
         - NODE_ENV=development
     ports:
-      - "80:80"
+      - "80:4000"
     volumes:
       - ./frontend/interrogator:/opt/node_app/app 
       - ./frontend/interrogator/package.json:/opt/node_app/package.json
@@ -70,6 +70,9 @@ services:
       # in questo modo i node_modules non verranno salvati nell'host 
       # nel caso in cui sia necessario averli entrambi (!RICORDARE DI ELIMINARE QUESTO VOLUME QUANDO FINITO)
       - notused_interrogator:/opt/node_app/app/node_modules
+    environment:
+    # https://daten-und-bass.io/blog/enabling-hot-reloading-with-vuejs-and-vue-cli-in-docker/
+      - CHOKIDAR_USEPOLLING=true
     healthcheck:
       disable: true
     networks:
