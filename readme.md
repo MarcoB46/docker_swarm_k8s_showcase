@@ -1,5 +1,5 @@
 # Docker Compose, Docker Swarm and k8s showcase example
-This project is a showcase for **Docker**, the utility **Docker Compose** and the native Orchestration Tool **Swarm**. <br>Some of the tecknologies used in this project are:
+This project is a showcase for **Docker**, the utility **Docker Compose** , the native Orchestration Tool **Swarm** and the popular Orchestrator tecnology **Kubernetes**. <br>Some of the tecknologies used in this project are:
 - NodeJS Express WebServer;
 - mongoDB;
 - Apache Webserver;
@@ -9,7 +9,7 @@ The project is divided into 3 services as follow:
 - a NodeJs Express WebServer, which communicates with the database through a dedicated subnetwork, listening on this following endpoints:
     - **/ping**: return a JSON in the following format
         - _id: is an auto-generated identifier created by the mongoDB database;
-        - hostname: is the container identifier created by Compose or Swarm;
+        - hostname: is the container identifier created by Compose, Swarm or Kubernetes;
         - counter: number of times of which the route /ping has been requested and the container named `hostname` responded;
 
     ```json
