@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    # app: server
+    io.kompose.service: server
+  name: server
+  namespace: default
+  selfLink: /apis/apps/v1/namespaces/default/deployments/server
+  uid: 1e9fcfc2-43c0-4c73-abfc-b8dc15cc4539
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 5
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      # app: server
+      io.kompose.service: server
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        # app: server
+        io.kompose.network/backend: "true"
+        io.kompose.network/frontend: "true"
+        io.kompose.service: server
+    spec:
+      containers:
+      - image: mbongiovanni94/stresstestexample:1.00.000
+        env:
+          - name: MONGO_DATABASE_NAME
+            valueFrom:
+              # defined inside database-secret.yaml
+              secretKeyRef:
+                name: database-secret
+                key: default-database
+          - name: MONGO_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: database-secret
+                key: database-password
+          - name: MONGO_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: database-secret
+                key: database-user
+          - name: MONGO_HOSTNAME
+            value: database
+          - name: MONGO_PORT
+            value: "27017"
+          - name: NODE_ENV
+            value: production
+        imagePullPolicy: IfNotPresent
+        name: server
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}

@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    # app: frontend
+    io.kompose.service: frontend
+  name: frontend
+  namespace: default
+  selfLink: /api/v1/namespaces/default/services/frontend
+  uid: aa783050-1f8c-43ff-8739-f959ee6849a4
+spec:
+  clusterIP: 10.152.183.97
+  clusterIPs:
+  - 10.152.183.97
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 30446
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    # app: frontend
+    io.kompose.service: frontend
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}

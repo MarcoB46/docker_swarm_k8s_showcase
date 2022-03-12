@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+    # app: server
+  name: server
+  namespace: default
+  selfLink: /api/v1/namespaces/default/services/server
+  uid: 5b5c8b04-5713-49e8-a24b-8b1982f3866c
+spec:
+  clusterIP: 10.152.183.186
+  clusterIPs:
+  - 10.152.183.186
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    io.kompose.service: server
+    # app: server
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
