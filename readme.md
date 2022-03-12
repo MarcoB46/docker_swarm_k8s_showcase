@@ -70,7 +70,7 @@ docker run -it -d -p 8088:8080 -v /var/run/docker.sock:/var/run/docker.sock dock
 
 
 ## k8s
-The files located inside the **/kompose** folder manages all the properties to deploy the application to a k8s cluster.<br>Those files are generated from the docker-stack.yml file using the [Kompose](https://kompose.io/) utility using the following command:<br>
+The files located inside the **/kompose** folder were generated from the docker-stack.yml file using the [Kompose](https://kompose.io/) utility using the following command:<br>
 ```console
 kompose convert -f docker-stack.yml -o kompose
 ```
@@ -84,18 +84,26 @@ The output is the followind list of files:
 - server-deployment.yaml
 - server-service.yaml
 
-**NOTE:** The file database-secret.yaml instead has been created manually in order to overcome the incompatibility for Kompose to convert external secrets, used in the docker-stack.yaml configuration. 
+**NOTE:** The file database-secret.yaml instead has been created manually in order to overcome the incompatibility for Kompose to convert external secrets, used in the docker-stack.yaml configuration. <br>
+
+Those configuration have been used to generate the final configurations files. Which are present in **/k8s** folder. 
+The server and frontend service/deploy were created using the following commands:
+
+```console
+k create deployment server --image=mbongiovanni94/stresstestexample:1.00.000 -o yaml --port=3000
+k expose deployment server --type=ClusterIP --port=3000 --name=server -o yaml
+
+k create deployment frontend --image=mbongiovanni94/stresstestfrontend:1.00.001 -o yaml
+k expose deployment frontend --type=NodePort --port=80 --name=frontend -o yaml
+
+```
 
 in order to apply those configuration to a k8s cluster it's possible to use the following command:
 ```console
- k apply -f database-secret.yaml,backend-networkpolicy.yaml,frontend-networkpolicy.yaml,database-deployment.yaml,database-service.yaml,server-deployment.yaml,server-service.yaml,frontend-deployment.yaml,frontend-service.yaml
+k apply -f k8s/
 ```
 
-in order to obtain the port assigned to the host it is possibile to use 
-```console
-k get service frontend --watch
-```
-waiting for the external IP to be assigned.
+The application will be visible to http://localhost:30446
 
 ----------
 ## Elastic Kubernetes Service
